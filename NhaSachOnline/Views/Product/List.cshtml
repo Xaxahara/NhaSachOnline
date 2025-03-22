@@ -1,0 +1,84 @@
+﻿@model NhaSachOnline.Models.ViewModels.ProductListViewModel
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+}
+
+<h1>Danh sách sản phẩm</h1>
+
+<!-- Form tìm kiếm -->
+<div class="mb-3">
+    <form asp-action="List" method="get" class="d-flex">
+        <input type="hidden" name="categoryId" value="@Model.CurrentCategoryId" />
+        <input type="text" name="searchQuery" value="@Model.SearchQuery" class="form-control me-2" placeholder="Tìm kiếm theo tên, tác giả, danh mục..." />
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <h3>Danh mục</h3>
+        <ul class="list-group">
+            <li class="list-group-item @(Model.CurrentCategoryId == 0 ? "active" : "")">
+                <a asp-action="List" asp-route-categoryId="0" asp-route-searchQuery="@Model.SearchQuery">Tất cả</a>
+            </li>
+            @foreach (var category in Model.Categories)
+            {
+                <li class="list-group-item @(Model.CurrentCategoryId == category.Id ? "active" : "")">
+                    <a asp-action="List" asp-route-categoryId="@category.Id" asp-route-searchQuery="@Model.SearchQuery">@category.Name</a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-9">
+        @if (!Model.Products.Any())
+        {
+            <p>Không tìm thấy sản phẩm nào.</p>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card">
+                            @if (!string.IsNullOrEmpty(product.ImagePath))
+                            {
+                                <img src="@product.ImagePath" class="card-img-top" alt="@product.Name" />
+                            }
+                            else
+                            {
+                                <img src="/images/products/default.jpg" class="card-img-top" alt="Hình ảnh mặc định" />
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Name</h5>
+                                <p class="card-text">Tác giả: @(product.Author ?? "Không rõ")</p>
+                                <p class="card-text">Giá: @product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</p>
+                                <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Xem chi tiết</a>
+                                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                    <button type="submit" class="btn btn-success">Thêm vào giỏ</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Phân trang -->
+            <div class="d-flex justify-content-center">
+                <nav>
+                    <ul class="pagination">
+                        @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-action="List" asp-route-categoryId="@Model.CurrentCategoryId" asp-route-pageNumber="@i" asp-route-searchQuery="@Model.SearchQuery">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>

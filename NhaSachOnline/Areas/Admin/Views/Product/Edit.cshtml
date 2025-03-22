@@ -1,0 +1,78 @@
+﻿@model NhaSachOnline.Models.Product
+
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+}
+
+<h2>Chỉnh sửa sản phẩm</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group mb-3">
+        <label asp-for="Name">Tên</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Price">Giá (VND)</label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Description">Mô tả</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="CategoryId">Danh mục</label>
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+            <option value="">-- Chọn danh mục --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Author">Tác giả</label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Publisher">Nhà xuất bản</label>
+        <input asp-for="Publisher" class="form-control" />
+        <span asp-validation-for="Publisher" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="PublicationYear">Năm xuất bản</label>
+        <input asp-for="PublicationYear" class="form-control" type="number" />
+        <span asp-validation-for="PublicationYear" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Stock">Số lượng tồn kho</label>
+        <input asp-for="Stock" class="form-control" type="number" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label>Hình ảnh hiện tại</label>
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <div>
+                <img src="@Model.ImagePath" class="img-fluid" style="max-height: 200px;" alt="@Model.Name" />
+            </div>
+        }
+        else
+        {
+            <p>Chưa có hình ảnh</p>
+        }
+    </div>
+    <div class="form-group mb-3">
+        <label>Thay đổi hình ảnh</label>
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
+        <small class="form-text text-muted">Bỏ qua nếu không muốn thay đổi hình ảnh.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

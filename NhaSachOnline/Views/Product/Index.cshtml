@@ -1,0 +1,48 @@
+﻿@model NhaSachOnline.Models.ViewModels.ProductListViewModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Products</h2>
+
+<div class="container">
+    <div class="row">
+        <!-- Danh sách loại sách (Categories) -->
+        <div class="col-md-3">
+            <h3>Categories</h3>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a asp-action="List" asp-route-categoryId="0">All Products</a>
+                </li>
+                @foreach (var category in Model.Categories)
+                {
+                    <li class="list-group-item">
+                        <a asp-action="List" asp-route-categoryId="@category.Id">@category.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Danh sách sản phẩm -->
+        <div class="col-md-9">
+            <div class="row">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <img src="@product.ImagePath" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">@product.Name</h5>
+                                <p class="card-text">@product.Description</p>
+                                <p class="card-text">Price: @product.Price.ToString("C")</p>
+                                <p class="card-text">Category: @product.Category.Name</p>
+                                <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

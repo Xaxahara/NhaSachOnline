@@ -1,0 +1,39 @@
+﻿/* Tùy chỉnh giao diện */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+    .product-card:hover {
+        transform: scale(1.05);
+    }
+
+    .product-card img {
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+.list-group-item.active a {
+    color: white;
+    text-decoration: none;
+}
+
+.list-group-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+    .list-group-item a:hover {
+        text-decoration: underline;
+    }
+
+.table th, .table td {
+    vertical-align: middle;
+}

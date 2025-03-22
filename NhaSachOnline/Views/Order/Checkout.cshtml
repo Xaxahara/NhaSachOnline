@@ -1,0 +1,75 @@
+﻿@model NhaSachOnline.Models.Order
+
+@{
+    ViewData["Title"] = "Thanh toán";
+    var cart = ViewBag.Cart as NhaSachOnline.Models.Cart;
+}
+
+<h1>Thanh toán</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Checkout" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Name">Họ và tên</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Phone">Số điện thoại</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="City">Thành phố</label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Zip">Mã bưu điện</label>
+                <input asp-for="Zip" class="form-control" />
+                <span asp-validation-for="Zip" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Xác nhận đặt hàng</button>
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-secondary">Quay lại giỏ hàng</a>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h3>Tóm tắt đơn hàng</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Tổng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (cart != null)
+                {
+                    @foreach (var item in cart.Items)
+                    {
+                        <tr>
+                            <td>@item.Product.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                            <td>@((item.Product.Price * item.Quantity).ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) VND</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
+                    <td>@(cart != null ? cart.ComputeTotalValue().ToString("N0", new System.Globalization.CultureInfo("vi-VN")) : "0") VND</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,67 @@
+﻿@model NhaSachOnline.Models.Cart
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<h1>Giỏ hàng của bạn</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (Model.Items.Any())
+{
+    <form asp-action="UpdateCart" method="post">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Tổng</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td>
+                            <input type="hidden" name="productId" value="@item.Product.Id" />
+                            <input type="number" name="quantity_@item.Product.Id" value="@item.Quantity" min="1" class="form-control d-inline" style="width: 80px;" />
+                        </td>
+                        <td>@item.Product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                        <td>@((item.Product.Price * item.Quantity).ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) VND</td>
+                        <td>
+                            <form asp-action="RemoveFromCart" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@item.Product.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
+                    <td>@Model.ComputeTotalValue().ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Cập nhật giỏ hàng</button>
+            <a asp-controller="Product" asp-action="List" class="btn btn-secondary">Tiếp tục mua sắm</a>
+            <a asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Thanh toán</a>
+        </div>
+    </form>
+}
+else
+{
+    <p>Giỏ hàng của bạn đang trống.</p>
+    <a asp-controller="Product" asp-action="List" class="btn btn-primary">Quay lại danh sách sản phẩm</a>
+}

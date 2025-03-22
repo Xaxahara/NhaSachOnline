@@ -1,0 +1,29 @@
+﻿@page
+@model LoginWithRecoveryCodeModel
+@{
+    ViewData["Title"] = "Xác minh mã khôi phục";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<p>
+    Bạn đã yêu cầu đăng nhập bằng mã khôi phục. Đăng nhập này sẽ không được ghi nhớ cho đến khi bạn cung cấp
+    mã từ ứng dụng xác thực hoặc tắt 2FA và đăng nhập lại.
+</p>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" placeholder="Mã khôi phục" />
+                <label asp-for="Input.RecoveryCode" class="form-label">Mã khôi phục</label>
+                <span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Đăng nhập</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

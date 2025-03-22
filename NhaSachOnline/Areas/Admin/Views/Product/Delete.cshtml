@@ -1,0 +1,30 @@
+﻿@model NhaSachOnline.Models.Product
+
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+}
+
+<h2>Xóa sản phẩm</h2>
+
+<h3>Bạn có chắc chắn muốn xóa sản phẩm này?</h3>
+
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Giá</dt>
+        <dd class="col-sm-10">@Model.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</dd>
+        <dt class="col-sm-2">Danh mục</dt>
+        <dd class="col-sm-10">@(Model.Category?.Name ?? "Không có danh mục")</dd>
+        <dt class="col-sm-2">Tác giả</dt>
+        <dd class="col-sm-10">@(Model.Author ?? "Không rõ")</dd>
+        <dt class="col-sm-2">Tồn kho</dt>
+        <dd class="col-sm-10">@Model.Stock</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>

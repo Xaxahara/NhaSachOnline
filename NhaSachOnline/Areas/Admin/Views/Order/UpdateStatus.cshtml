@@ -1,0 +1,20 @@
+﻿@model NhaSachOnline.Models.Order
+
+@{
+    ViewData["Title"] = "Cập nhật trạng thái đơn hàng";
+}
+
+<h1>Cập nhật trạng thái đơn hàng #@Model.OrderId</h1>
+
+<form asp-action="UpdateStatus" method="post">
+    <input type="hidden" name="id" value="@Model.OrderId" />
+    <div class="form-group mb-3">
+        <label>Trạng thái hiện tại: @Model.Status</label>
+    </div>
+    <div class="form-group mb-3">
+        <label>Chọn trạng thái mới</label>
+        <select name="status" class="form-control" asp-items="ViewBag.Statuses"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

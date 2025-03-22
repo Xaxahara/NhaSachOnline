@@ -1,0 +1,40 @@
+﻿@model IEnumerable<NhaSachOnline.Models.Product>
+
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+
+<h1>Quản lý sản phẩm</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Thêm sản phẩm mới</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Danh mục</th>
+            <th>Tác giả</th>
+            <th>Tồn kho</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                <td>@(product.Category != null ? product.Category.Name : "Không có danh mục")</td>
+                <td>@product.Author</td>
+                <td>@product.Stock</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-info btn-sm">Chỉnh sửa</a>
+                    <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

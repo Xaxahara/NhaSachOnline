@@ -1,0 +1,35 @@
+﻿@model NhaSachOnline.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img src="@Model.ImagePath" class="img-fluid" alt="@Model.Name" />
+        }
+        else
+        {
+            <img src="/images/products/default.jpg" class="img-fluid" alt="Hình ảnh mặc định" />
+        }
+    </div>
+    <div class="col-md-8">
+        <p><strong>Tác giả:</strong> @(Model.Author ?? "Không rõ")</p>
+        <p><strong>Nhà xuất bản:</strong> @(Model.Publisher ?? "Không rõ")</p>
+        <p><strong>Năm xuất bản:</strong> @(Model.PublicationYear > 0 ? Model.PublicationYear.ToString() : "Không rõ")</p>
+        <p><strong>Danh mục:</strong> @(Model.Category?.Name ?? "Không có danh mục")</p>
+        <p><strong>Giá:</strong> @Model.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</p>
+        <p><strong>Mô tả:</strong> @(Model.Description ?? "Không có mô tả")</p>
+        <p><strong>Tồn kho:</strong> @Model.Stock</p>
+        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+            <button type="submit" class="btn btn-success" @(Model.Stock == 0 ? "disabled" : "")>Thêm vào giỏ hàng</button>
+        </form>
+        <a asp-action="List" class="btn btn-secondary mt-2">Quay lại danh sách</a>
+    </div>
+</div>
