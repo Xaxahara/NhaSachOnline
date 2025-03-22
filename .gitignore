@@ -1,0 +1,27 @@
+# Visual Studio temporary files
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# NuGet Packages
+*.nupkg
+packages/
+
+# ASP.NET Core specific
+wwwroot/lib/
+
+# Configuration files with sensitive data
+appsettings.json
+appsettings.*.json
+
+# Logs
+*.log
+
+# Other
+[Dd]ebug/
+[Rr]elease/
