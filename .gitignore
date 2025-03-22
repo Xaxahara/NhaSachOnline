@@ -15,10 +15,6 @@ packages/
 # ASP.NET Core specific
 wwwroot/lib/
 
-# Configuration files with sensitive data
-appsettings.json
-appsettings.*.json
-
 # Logs
 *.log
 
