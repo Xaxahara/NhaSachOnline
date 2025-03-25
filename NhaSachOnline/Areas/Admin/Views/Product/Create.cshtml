@@ -9,7 +9,7 @@
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group mb-3">
-        <label asp-for="Name">Tên</label>
+        <label asp-for="Name">Tên sản phẩm</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
@@ -53,9 +53,9 @@
     <div class="form-group mb-3">
         <label>Hình ảnh</label>
         <input type="file" name="imageFile" class="form-control" accept="image/*" />
-        <small class="form-text text-muted">Bạn có thể bỏ qua nếu đã thêm link hình ảnh vào database.</small>
+        <small class="form-text text-muted">Bạn có thể bỏ qua nếu không muốn thêm hình ảnh.</small>
     </div>
-    <button type="submit" class="btn btn-primary">Thêm</button>
+    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
     <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>
 

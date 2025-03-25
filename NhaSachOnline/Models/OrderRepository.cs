@@ -33,6 +33,7 @@ namespace NhaSachOnline.Models
                     existingOrder.Status = order.Status;
                     existingOrder.Shipped = order.Shipped;
                     existingOrder.Total = order.Total;
+                    existingOrder.DetailItems = order.DetailItems;
                 }
             }
             _context.SaveChanges();

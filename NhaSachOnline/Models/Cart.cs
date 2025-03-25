@@ -1,5 +1,4 @@
-﻿using NhaSachOnline.Infrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace NhaSachOnline.Models
@@ -30,12 +29,6 @@ namespace NhaSachOnline.Models
                 }
                 item.Quantity += quantity;
             }
-
-            // Lưu vào session nếu là SessionCart
-            if (this is SessionCart sessionCart && sessionCart.Session != null)
-            {
-                sessionCart.Session.SetJson("Cart", this);
-            }
         }
 
         public virtual void UpdateQuantity(int productId, int quantity)
@@ -56,34 +49,16 @@ namespace NhaSachOnline.Models
                     item.Quantity = quantity;
                 }
             }
-
-            // Lưu vào session nếu là SessionCart
-            if (this is SessionCart sessionCart && sessionCart.Session != null)
-            {
-                sessionCart.Session.SetJson("Cart", this);
-            }
         }
 
         public virtual void RemoveItem(int productId)
         {
             items.RemoveAll(p => p.Product.Id == productId);
-
-            // Lưu vào session nếu là SessionCart
-            if (this is SessionCart sessionCart && sessionCart.Session != null)
-            {
-                sessionCart.Session.SetJson("Cart", this);
-            }
         }
 
         public virtual void Clear()
         {
             items.Clear();
-
-            // Lưu vào session nếu là SessionCart
-            if (this is SessionCart sessionCart && sessionCart.Session != null)
-            {
-                sessionCart.Session.Remove("Cart");
-            }
         }
 
         public decimal ComputeTotalValue()

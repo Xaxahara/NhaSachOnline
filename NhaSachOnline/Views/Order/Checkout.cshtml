@@ -47,23 +47,20 @@
                 </tr>
             </thead>
             <tbody>
-                @if (cart != null)
+                @foreach (var item in cart.Items)
                 {
-                    @foreach (var item in cart.Items)
-                    {
-                        <tr>
-                            <td>@item.Product.Name</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
-                            <td>@((item.Product.Price * item.Quantity).ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) VND</td>
-                        </tr>
-                    }
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                        <td>@((item.Product.Price * item.Quantity).ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) VND</td>
+                    </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
-                    <td>@(cart != null ? cart.ComputeTotalValue().ToString("N0", new System.Globalization.CultureInfo("vi-VN")) : "0") VND</td>
+                    <td>@cart.ComputeTotalValue().ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
                 </tr>
             </tfoot>
         </table>

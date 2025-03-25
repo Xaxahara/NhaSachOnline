@@ -20,9 +20,10 @@
             color: white;
             padding: 20px 0;
             text-align: center;
-            position: fixed;
+            position: relative;
             bottom: 0;
             width: 100%;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -37,10 +38,16 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-controller="Product" asp-action="List">Sản phẩm</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
@@ -63,7 +70,9 @@
     </div>
 
     <footer class="footer">
-        <p>© 2025 Nhà Sách Online. Mọi quyền được bảo lưu.</p>
+        <div class="container">
+            <p>&copy; 2025 Nhà Sách Online. Tất cả quyền được bảo lưu.</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

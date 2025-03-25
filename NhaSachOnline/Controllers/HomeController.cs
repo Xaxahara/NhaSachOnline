@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NhaSachOnline.Models;
+using System.Diagnostics;
 
 namespace NhaSachOnline.Controllers
 {
@@ -16,17 +17,15 @@ namespace NhaSachOnline.Controllers
 
         public IActionResult Index()
         {
-            // Lấy 3 sản phẩm mới nhất
             var topProducts = _productRepository.GetAllProduct()
                 .OrderByDescending(p => p.Id)
                 .Take(3)
-                .ToList(); // ToList() để đảm bảo truy vấn được thực thi
+                .ToList();
 
-            // Lấy 3 đơn hàng mới nhất
             var recentOrders = _orderRepository.Orders
                 .OrderByDescending(o => o.OrderPlaced)
                 .Take(3)
-                .ToList(); // ToList() để đảm bảo truy vấn được thực thi
+                .ToList();
 
             ViewBag.TopProducts = topProducts;
             ViewBag.RecentOrders = recentOrders;
@@ -37,6 +36,12 @@ namespace NhaSachOnline.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

@@ -4,39 +4,47 @@
     ViewData["Title"] = "Chi tiết sản phẩm";
 }
 
-<h2>Chi tiết sản phẩm</h2>
+@if (Model == null)
+{
+    <h2>Không tìm thấy sản phẩm</h2>
+    <a asp-action="Index" class="btn btn-primary">Quay lại</a>
+}
+else
+{
+    <h2>Chi tiết sản phẩm</h2>
 
-<div class="row">
-    <div class="col-md-4">
-        @if (!string.IsNullOrEmpty(Model.ImagePath))
-        {
-            <img src="@Model.ImagePath" class="img-fluid" alt="@Model.Name" />
-        }
-        else
-        {
-            <img src="/images/products/default.jpg" class="img-fluid" alt="Hình ảnh mặc định" />
-        }
+    <div class="row">
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <img src="@Model.ImagePath" class="img-fluid" alt="@Model.Name" />
+            }
+            else
+            {
+                <img src="/images/products/default.jpg" class="img-fluid" alt="Hình ảnh mặc định" />
+            }
+        </div>
+        <div class="col-md-8">
+            <dl class="row">
+                <dt class="col-sm-3">Tên</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+                <dt class="col-sm-3">Giá</dt>
+                <dd class="col-sm-9">@Model.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</dd>
+                <dt class="col-sm-3">Mô tả</dt>
+                <dd class="col-sm-9">@(Model.Description ?? "Không có mô tả")</dd>
+                <dt class="col-sm-3">Danh mục</dt>
+                <dd class="col-sm-9">@(Model.Category?.Name ?? "Không có danh mục")</dd>
+                <dt class="col-sm-3">Tác giả</dt>
+                <dd class="col-sm-9">@(Model.Author ?? "Không rõ")</dd>
+                <dt class="col-sm-3">Nhà xuất bản</dt>
+                <dd class="col-sm-9">@(Model.Publisher ?? "Không rõ")</dd>
+                <dt class="col-sm-3">Năm xuất bản</dt>
+                <dd class="col-sm-9">@(Model.PublicationYear > 0 ? Model.PublicationYear.ToString() : "Không rõ")</dd>
+                <dt class="col-sm-3">Tồn kho</dt>
+                <dd class="col-sm-9">@Model.Stock</dd>
+            </dl>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh sửa</a>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        </div>
     </div>
-    <div class="col-md-8">
-        <dl class="row">
-            <dt class="col-sm-3">Tên</dt>
-            <dd class="col-sm-9">@Model.Name</dd>
-            <dt class="col-sm-3">Giá</dt>
-            <dd class="col-sm-9">@Model.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</dd>
-            <dt class="col-sm-3">Mô tả</dt>
-            <dd class="col-sm-9">@(Model.Description ?? "Không có mô tả")</dd>
-            <dt class="col-sm-3">Danh mục</dt>
-            <dd class="col-sm-9">@(Model.Category?.Name ?? "Không có danh mục")</dd>
-            <dt class="col-sm-3">Tác giả</dt>
-            <dd class="col-sm-9">@(Model.Author ?? "Không rõ")</dd>
-            <dt class="col-sm-3">Nhà xuất bản</dt>
-            <dd class="col-sm-9">@(Model.Publisher ?? "Không rõ")</dd>
-            <dt class="col-sm-3">Năm xuất bản</dt>
-            <dd class="col-sm-9">@(Model.PublicationYear > 0 ? Model.PublicationYear.ToString() : "Không rõ")</dd>
-            <dt class="col-sm-3">Tồn kho</dt>
-            <dd class="col-sm-9">@Model.Stock</dd>
-        </dl>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh sửa</a>
-        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-    </div>
-</div>
+}

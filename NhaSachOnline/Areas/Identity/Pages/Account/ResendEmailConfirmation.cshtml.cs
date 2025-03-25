@@ -48,7 +48,13 @@ namespace NhaSachOnline.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Email xác nhận đã được gửi. Vui lòng kiểm tra email của bạn.");
+                ModelState.AddModelError(string.Empty, "Email không tồn tại.");
+                return Page();
+            }
+
+            if (user.EmailConfirmed)
+            {
+                ModelState.AddModelError(string.Empty, "Tài khoản đã được xác nhận. Vui lòng đăng nhập.");
                 return Page();
             }
 
@@ -60,13 +66,14 @@ namespace NhaSachOnline.Areas.Identity.Pages.Account
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
+
             await _emailSender.SendEmailAsync(
                 Input.Email,
                 "Xác nhận email của bạn",
                 $"Vui lòng xác nhận tài khoản của bạn bằng cách <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>nhấn vào đây</a>.");
 
-            ModelState.AddModelError(string.Empty, "Email xác nhận đã được gửi. Vui lòng kiểm tra email của bạn.");
-            return Page();
+            TempData["SuccessMessage"] = "Email xác nhận đã được gửi lại. Vui lòng kiểm tra hộp thư (bao gồm thư rác).";
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
     }
 }

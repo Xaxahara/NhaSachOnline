@@ -38,7 +38,7 @@ namespace NhaSachOnline.Infrastructure
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error sending email: {ex.Message}", ex);
+                throw new InvalidOperationException($"Lỗi khi gửi email: {ex.Message}", ex);
             }
         }
     }

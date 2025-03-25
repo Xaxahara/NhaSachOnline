@@ -13,52 +13,52 @@
 
 @if (Model.Items.Any())
 {
-    <form asp-action="UpdateCart" method="post">
-        <table class="table table-bordered table-striped">
-            <thead>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Tổng</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
                 <tr>
-                    <th>Sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Giá</th>
-                    <th>Tổng</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td>@item.Product.Name</td>
-                        <td>
+                    <td>@item.Product.Name</td>
+                    <td>
+                        <form asp-action="UpdateCart" method="post" class="d-inline">
                             <input type="hidden" name="productId" value="@item.Product.Id" />
-                            <input type="number" name="quantity_@item.Product.Id" value="@item.Quantity" min="1" class="form-control d-inline" style="width: 80px;" />
-                        </td>
-                        <td>@item.Product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
-                        <td>@((item.Product.Price * item.Quantity).ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) VND</td>
-                        <td>
-                            <form asp-action="RemoveFromCart" method="post" class="d-inline">
-                                <input type="hidden" name="productId" value="@item.Product.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
-                    <td>@Model.ComputeTotalValue().ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
-                    <td></td>
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control d-inline" style="width: 80px;" />
+                            <button type="submit" class="btn btn-sm btn-primary">Cập nhật</button>
+                        </form>
+                    </td>
+                    <td>@item.Product.Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                    <td>@((item.Product.Price * item.Quantity).ToString("N0", new System.Globalization.CultureInfo("vi-VN"))) VND</td>
+                    <td>
+                        <form asp-action="RemoveFromCart" method="post">
+                            <input type="hidden" name="productId" value="@item.Product.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                        </form>
+                    </td>
                 </tr>
-            </tfoot>
-        </table>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
+                <td>@Model.ComputeTotalValue().ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Cập nhật giỏ hàng</button>
-            <a asp-controller="Product" asp-action="List" class="btn btn-secondary">Tiếp tục mua sắm</a>
-            <a asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Thanh toán</a>
-        </div>
-    </form>
+    <div class="text-center">
+        <a asp-controller="Product" asp-action="List" class="btn btn-secondary">Tiếp tục mua sắm</a>
+        <a asp-controller="Order" asp-action="Checkout" class="btn btn-primary">Thanh toán</a>
+    </div>
 }
 else
 {

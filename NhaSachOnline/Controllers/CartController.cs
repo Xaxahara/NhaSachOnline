@@ -14,13 +14,11 @@ namespace NhaSachOnline.Controllers
             _cart = cartService;
         }
 
-        // GET: /Cart
         public IActionResult Index()
         {
             return View(_cart);
         }
 
-        // POST: /Cart/AddToCart
         [HttpPost]
         public IActionResult AddToCart(int productId, int quantity = 1)
         {
@@ -30,52 +28,61 @@ namespace NhaSachOnline.Controllers
                 return NotFound();
             }
 
-            _cart.AddItem(product, quantity);
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: /Cart/RemoveFromCart
-        [HttpPost]
-        public IActionResult RemoveFromCart(int productId)
-        {
-            _cart.RemoveItem(productId); // Sửa từ RemoveLine thành RemoveItem
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: /Cart/UpdateCart
-        [HttpPost]
-        public IActionResult UpdateCart(IFormCollection form)
-        {
-            foreach (var key in form.Keys)
+            try
             {
-                if (key.StartsWith("quantity_"))
-                {
-                    var productId = int.Parse(key.Replace("quantity_", ""));
-                    var quantity = int.Parse(form[key]);
-                    _cart.UpdateQuantity(productId, quantity); // Sửa từ UpdateItem thành UpdateQuantity
-                }
+                _cart.AddItem(product, quantity);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
             }
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Cart/Checkout
+        [HttpPost]
+        public IActionResult RemoveFromCart(int productId)
+        {
+            _cart.RemoveItem(productId);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult UpdateCart(int productId, int quantity)
+        {
+            var product = _productRepository.GetProductById(productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _cart.UpdateQuantity(productId, quantity);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         public IActionResult Checkout()
         {
-            if (!_cart.Items.Any()) // Sửa từ Lines thành Items
+            if (!_cart.Items.Any())
             {
+                TempData["ErrorMessage"] = "Giỏ hàng của bạn đang trống.";
                 return RedirectToAction(nameof(Index));
             }
             return View(_cart);
         }
 
-        // POST: /Cart/Checkout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Checkout(Order order)
         {
-            if (!_cart.Items.Any()) // Sửa từ Lines thành Items
+            if (!_cart.Items.Any())
             {
-                ModelState.AddModelError("", "Giỏ hàng của bạn trống!");
+                ModelState.AddModelError("", "Giỏ hàng của bạn đang trống!");
                 return View(_cart);
             }
 
@@ -84,19 +91,18 @@ namespace NhaSachOnline.Controllers
                 order.DetailItems = _cart.Items.Select(item => new OrderDetail
                 {
                     ProductId = item.Product.Id,
+                    Product = item.Product,
                     Quantity = item.Quantity,
                     Price = item.Product.Price
-                }).ToList(); // Sửa từ Lines thành Items và gán vào DetailItems
+                }).ToList();
 
                 order.Total = _cart.ComputeTotalValue();
                 order.OrderPlaced = DateTime.Now;
                 order.Status = "Chờ xử lý";
 
-                // Lưu đơn hàng vào cơ sở dữ liệu
                 IOrderRepository orderRepo = HttpContext.RequestServices.GetService<IOrderRepository>();
                 orderRepo.SaveOrder(order);
 
-                // Xóa giỏ hàng sau khi thanh toán
                 _cart.Clear();
                 return RedirectToAction("OrderCompleted", new { orderId = order.OrderId });
             }
@@ -104,7 +110,6 @@ namespace NhaSachOnline.Controllers
             return View(_cart);
         }
 
-        // GET: /Cart/OrderCompleted
         public IActionResult OrderCompleted(int orderId)
         {
             ViewBag.OrderId = orderId;

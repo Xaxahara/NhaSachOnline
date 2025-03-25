@@ -20,13 +20,11 @@ namespace NhaSachOnline.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Đảm bảo ánh xạ đúng tên bảng
             modelBuilder.Entity<Product>().ToTable("Products");
             modelBuilder.Entity<Category>().ToTable("Categories");
             modelBuilder.Entity<Order>().ToTable("Orders");
             modelBuilder.Entity<OrderDetail>().ToTable("OrderDetails");
 
-            // Cấu hình khóa chính và quan hệ
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(od => od.Id);
 

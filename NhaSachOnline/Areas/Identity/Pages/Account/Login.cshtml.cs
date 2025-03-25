@@ -12,14 +12,20 @@ using Microsoft.Extensions.Logging;
 
 namespace NhaSachOnline.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -71,6 +77,13 @@ namespace NhaSachOnline.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (user != null && !user.EmailConfirmed)
+                {
+                    ModelState.AddModelError(string.Empty, "Tài khoản của bạn chưa được xác nhận. Vui lòng kiểm tra email (bao gồm thư rác) để xác nhận tài khoản hoặc gửi lại email xác nhận.");
+                    return Page();
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -88,7 +101,7 @@ namespace NhaSachOnline.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Đăng nhập không thành công.");
+                    ModelState.AddModelError(string.Empty, "Đăng nhập không thành công. Vui lòng kiểm tra email và mật khẩu.");
                     return Page();
                 }
             }

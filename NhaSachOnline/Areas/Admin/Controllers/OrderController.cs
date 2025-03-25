@@ -19,13 +19,21 @@ namespace NhaSachOnline.Areas.Admin.Controllers
             _context = context;
         }
 
-        public ViewResult Index()
+        public IActionResult Index()
         {
-            var orders = _orderRepository.Orders.ToList();
-            return View(orders);
+            try
+            {
+                var orders = _orderRepository.Orders.ToList();
+                return View(orders);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Lỗi khi tải danh sách đơn hàng: {ex.Message}";
+                return View(new List<Order>());
+            }
         }
 
-        public ViewResult Details(int id)
+        public IActionResult Details(int id)
         {
             var order = _orderRepository.Orders.FirstOrDefault(o => o.OrderId == id);
             if (order == null)

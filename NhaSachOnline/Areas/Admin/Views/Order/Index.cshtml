@@ -6,36 +6,48 @@
 
 <h2>Quản lý đơn hàng</h2>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Mã đơn hàng</th>
-            <th>Khách hàng</th>
-            <th>Ngày đặt</th>
-            <th>Tổng tiền</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
+@if (!Model.Any())
+{
+    <p>Chưa có đơn hàng nào.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>@order.OrderId</td>
-                <td>@order.Name</td>
-                <td>@order.OrderPlaced.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@order.Total.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
-                <td>@order.Status</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-info">Chi tiết</a>
-                    <a asp-action="UpdateStatus" asp-route-id="@order.OrderId" class="btn btn-primary">Cập nhật trạng thái</a>
-                </td>
+                <th>Mã đơn hàng</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.Name</td>
+                    <td>@order.OrderPlaced.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@order.Total.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) VND</td>
+                    <td>@order.Status</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-info">Chi tiết</a>
+                        <a asp-action="UpdateStatus" asp-route-id="@order.OrderId" class="btn btn-primary">Cập nhật trạng thái</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

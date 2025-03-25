@@ -4,5 +4,30 @@
     ViewData["Title"] = "Xác nhận email";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Xác nhận email</h2>
+            <hr />
+
+            @if (!string.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <div class="alert @(Model.StatusMessage.Contains("Lỗi") ? "alert-danger" : "alert-success")" role="alert">
+                    @Model.StatusMessage
+                </div>
+            }
+
+            @if (Model.StatusMessage.Contains("Lỗi"))
+            {
+                <div class="text-center">
+                    <p>
+                        Bạn có thể thử gửi lại email xác nhận: <a asp-page="./ResendEmailConfirmation">Gửi lại email</a>
+                    </p>
+                    <p>
+                        Hoặc quay lại trang đăng nhập: <a asp-page="./Login">Đăng nhập</a>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

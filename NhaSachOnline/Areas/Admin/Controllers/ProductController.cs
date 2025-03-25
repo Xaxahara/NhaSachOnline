@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NhaSachOnline.Models;
-using NhaSachOnline.Models.ViewModels;
 
 namespace NhaSachOnline.Areas.Admin.Controllers
 {
@@ -17,13 +16,21 @@ namespace NhaSachOnline.Areas.Admin.Controllers
             _productRepository = repo;
         }
 
-        public ViewResult Index()
+        public IActionResult Index()
         {
-            var products = _productRepository.GetAllProduct();
-            return View(products);
+            try
+            {
+                var products = _productRepository.GetAllProduct().ToList();
+                return View(products);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Lỗi khi tải danh sách sản phẩm: {ex.Message}";
+                return View(new List<Product>());
+            }
         }
 
-        public ViewResult Details(int id)
+        public IActionResult Details(int id)
         {
             var product = _productRepository.GetProductById(id);
             if (product == null)
@@ -34,7 +41,7 @@ namespace NhaSachOnline.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public ViewResult Create()
+        public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_productRepository.GetAllCategories(), "Id", "Name");
             return View();
@@ -72,7 +79,7 @@ namespace NhaSachOnline.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public ViewResult Edit(int id)
+        public IActionResult Edit(int id)
         {
             var product = _productRepository.GetProductById(id);
             if (product == null)

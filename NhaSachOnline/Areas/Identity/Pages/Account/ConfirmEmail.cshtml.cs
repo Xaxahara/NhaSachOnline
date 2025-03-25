@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace NhaSachOnline.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -25,19 +26,40 @@ namespace NhaSachOnline.Areas.Identity.Pages.Account
         {
             if (userId == null || code == null)
             {
+                StatusMessage = "Lỗi: Thiếu thông tin xác nhận email.";
                 return RedirectToPage("/Index");
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Không thể tải người dùng với ID '{userId}'.");
+                StatusMessage = $"Lỗi: Không tìm thấy người dùng với ID '{userId}'.";
+                return Page();
             }
 
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            try
+            {
+                // Giải mã code
+                code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Lỗi khi giải mã mã xác nhận: {ex.Message}";
+                return Page();
+            }
+
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Cảm ơn bạn đã xác nhận email." : "Lỗi khi xác nhận email.";
-            return Page();
+            if (result.Succeeded)
+            {
+                StatusMessage = "Cảm ơn bạn đã xác nhận email. Bạn có thể đăng nhập ngay bây giờ.";
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+            else
+            {
+                // Hiển thị chi tiết lỗi
+                StatusMessage = "Lỗi khi xác nhận email: " + string.Join(", ", result.Errors.Select(e => e.Description));
+                return Page();
+            }
         }
     }
 }

@@ -1,2 +1,11 @@
-﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+﻿<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/additional-methods.min.js"></script>
+<script>
+    // Tùy chỉnh thông điệp lỗi bằng tiếng Việt
+    $.validator.messages.required = "Trường này là bắt buộc.";
+    $.validator.messages.number = "Vui lòng nhập một số hợp lệ.";
+    $.validator.messages.min = "Giá trị phải lớn hơn hoặc bằng {0}.";
+    $.validator.messages.max = "Giá trị phải nhỏ hơn hoặc bằng {0}.";
+    $.validator.messages.email = "Vui lòng nhập địa chỉ email hợp lệ.";
+</script>

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NhaSachOnline.Models;
-using System;
 
 namespace NhaSachOnline.Infrastructure
 {
@@ -28,6 +27,12 @@ namespace NhaSachOnline.Infrastructure
         public override void RemoveItem(int productId)
         {
             base.RemoveItem(productId);
+            Session?.SetJson("Cart", this);
+        }
+
+        public override void UpdateQuantity(int productId, int quantity)
+        {
+            base.UpdateQuantity(productId, quantity);
             Session?.SetJson("Cart", this);
         }
 

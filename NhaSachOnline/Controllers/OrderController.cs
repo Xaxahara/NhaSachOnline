@@ -29,7 +29,7 @@ namespace NhaSachOnline.Controllers
                 TempData["ErrorMessage"] = "Giỏ hàng của bạn đang trống.";
                 return RedirectToAction("Index", "Cart");
             }
-            ViewBag.Cart = _cart; // Truyền Cart vào ViewBag
+            ViewBag.Cart = _cart;
             return View(new Order());
         }
 
@@ -49,7 +49,17 @@ namespace NhaSachOnline.Controllers
                 try
                 {
                     order.UserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                    order.DetailItems = _cart.Items.Select(item => new OrderDetail
+                    {
+                        ProductId = item.Product.Id,
+                        Product = item.Product,
+                        Quantity = item.Quantity,
+                        Price = item.Product.Price
+                    }).ToList();
                     order.Total = _cart.ComputeTotalValue();
+                    order.OrderPlaced = DateTime.Now;
+                    order.Status = "Chờ xử lý";
+
                     _orderRepository.SaveOrder(order);
 
                     var user = await _userManager.GetUserAsync(User);
